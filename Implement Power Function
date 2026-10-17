@@ -1,0 +1,20 @@
+import java.util.*;
+
+public class Main {
+    //O(power)
+    public static int implementPowFunction(int base, int power) {
+        int ans = 1;
+        for (int i = 1; i <= power; i++) {
+            ans = ans * base;
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        int base = 2;
+        int power = 4;
+        
+        int result = implementPowFunction(base, power);
+        System.out.println(base + " raised to the power " + power + " is: " + result);
+    }
+}
