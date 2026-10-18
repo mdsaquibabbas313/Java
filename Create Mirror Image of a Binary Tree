@@ -1,0 +1,62 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class Main {
+    public static TreeNode createMirrorImageTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+
+        TreeNode leftSubTree = createMirrorImageTree(root.right);
+        TreeNode rightSubtree = createMirrorImageTree(root.left);
+
+        root.left = leftSubTree;
+        root.right = rightSubtree;
+
+        return root;
+    }
+
+    // Helper method to print tree in Pre-Order (Root, Left, Right)
+    public static void printPreOrder(TreeNode root) {
+        if (root == null) return;
+        System.out.print(root.val + " ");
+        printPreOrder(root.left);
+        printPreOrder(root.right);
+    }
+
+    public static void main(String[] args) {
+        // Constructing root1:
+        //      1
+        //     / \
+        //    2   3
+        //   / \
+        //  4   5
+        TreeNode root1 = new TreeNode(1);
+        root1.left = new TreeNode(2);
+        root1.right = new TreeNode(3);
+        root1.left.left = new TreeNode(4);
+        root1.left.right = new TreeNode(5);
+
+        System.out.print("Pre-order before mirroring: ");
+        printPreOrder(root1);
+        System.out.println();
+
+        // Create the mirror image
+        TreeNode mirroredRoot = createMirrorImageTree(root1);
+
+        System.out.print("Pre-order after mirroring:  ");
+        printPreOrder(mirroredRoot);
+        System.out.println();
+    }
+}
