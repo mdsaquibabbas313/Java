@@ -1,0 +1,29 @@
+// Constructing the binary tree from the image:
+    TreeNode root = new TreeNode(9);
+    
+    // Level 1
+    root.left = new TreeNode(6);
+    root.right = new TreeNode(4);
+    
+    // Level 2
+    root.left.left = new TreeNode(2);
+    root.left.right = new TreeNode(3);
+    root.right.left = new TreeNode(8);
+    root.right.right = new TreeNode(1);
+    
+    // Level 3
+    root.left.left.left = new TreeNode(7);
+    root.left.left.right = new TreeNode(11);
+    root.left.right.left = new TreeNode(5);
+    root.right.right.right = new TreeNode(12); // from node 1 -> right child
+    
+    // Level 4
+    root.left.left.left.left = new TreeNode(14); // from node 7 -> left child
+    root.left.right.left.right = new TreeNode(20); // from node 5 -> right child
+    
+    // Level 5
+    root.left.right.left.right.right = new TreeNode(31); // from node 20 -> right child
+    
+    List<Integer> result = printLeftViewOfTree(root);
+    System.out.println("Left View of Tree: " + result); 
+    // Expected Output: [9, 6, 2, 7, 14, 31]
