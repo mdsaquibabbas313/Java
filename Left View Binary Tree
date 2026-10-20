@@ -1,0 +1,68 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    
+    TreeNode(int val) {
+        this.val = val;
+    }
+}
+
+public class Main {
+    // Function to return the left view of a binary tree using BFS
+    public static List<Integer> printLeftViewOfTree(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        
+        // Base case: if the tree is empty, return an empty list
+        if (root == null) {
+            return ans;
+        }
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        // Traverse level by level
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+      
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode n = queue.poll();
+                
+                // The first node (i = 0) at each level represents the left view
+                if (i == 0) {
+                    ans.add(n.val);   
+                }
+                
+                // Add left child to queue if it exists
+                if (n.left != null) {
+                    queue.offer(n.left);
+                }
+                // Add right child to queue if it exists
+                if (n.right != null) {
+                    queue.offer(n.right);
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        // Constructing sample binary tree:
+        //        1
+        //       / \
+        //      2   3
+        //     /     \
+        //    4       5
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.right.right = new TreeNode(5);
+        
+        List<Integer> result = printLeftViewOfTree(root);
+        System.out.println("Left View of Tree: " + result); // Output: [1, 2, 4]
+    }
+}
