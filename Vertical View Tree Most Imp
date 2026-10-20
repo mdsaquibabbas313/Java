@@ -1,0 +1,101 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    
+    TreeNode(int val) {
+        this.val = val;
+    }
+}
+
+class NodeLevel {
+    TreeNode node;
+    int dist;
+
+    NodeLevel(TreeNode node, int dist) {
+        this.node = node;
+        this.dist = dist;
+    }
+}
+
+public class Main {
+
+    public static List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>(); 
+        if (root == null) return ans;
+
+        Queue<NodeLevel> queue = new LinkedList<>();
+        
+        // Use TreeMap so horizontal distances remain sorted from left to right
+        Map<Integer, List<Integer>> map = new TreeMap<>();
+
+        queue.offer(new NodeLevel(root, 0));
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            for (int i = 0; i < size; i++) {
+                NodeLevel currentNode = queue.poll();
+
+                // Group node values by their horizontal distance
+                if (!map.containsKey(currentNode.dist)) {
+                    map.put(currentNode.dist, new ArrayList<>());
+                }
+
+                map.get(currentNode.dist).add(currentNode.node.val);
+
+                // Check and push left child with distance - 1
+                if (currentNode.node.left != null) {
+                    NodeLevel leftNode = new NodeLevel(currentNode.node.left, currentNode.dist - 1);
+                    queue.offer(leftNode);
+                }
+
+                // Check and push right child with distance + 1
+                if (currentNode.node.right != null) {
+                    NodeLevel rightNode = new NodeLevel(currentNode.node.right, currentNode.dist + 1);
+                    queue.offer(rightNode);
+                }
+            }
+        }
+
+        // Add sorted columns into the final answer list
+        for (List<Integer> list : map.values()) {
+            ans.add(list);
+        }
+
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        // Constructing the complete binary tree from the image:
+        TreeNode root = new TreeNode(9);
+        
+        // Level 1
+        root.left = new TreeNode(6);
+        root.right = new TreeNode(4);
+        
+        // Level 2
+        root.left.left = new TreeNode(2);
+        root.left.right = new TreeNode(3);
+        root.right.left = new TreeNode(8);
+        root.right.right = new TreeNode(1);
+        
+        // Level 3
+        root.left.left.left = new TreeNode(7);
+        root.left.left.right = new TreeNode(11);
+        root.left.right.left = new TreeNode(5);
+        root.right.right.right = new TreeNode(12); 
+        
+        // Level 4
+        root.left.left.left.left = new TreeNode(14); 
+        root.left.right.left.right = new TreeNode(20); 
+        
+        // Level 5
+        root.left.right.left.right.right = new TreeNode(31); 
+
+        List<List<Integer>> result = levelOrder(root);
+        System.out.println("Vertical Order Traversal: " + result);
+    }
+}
