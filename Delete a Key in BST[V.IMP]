@@ -1,0 +1,100 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    // Constructor to initialize the node
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class Main {
+
+    public static int getMax(TreeNode root) {
+        if(root == null) return -1;
+
+        while(root.right != null) {
+          root = root.right;
+        }
+
+        return root.val;
+
+
+      }
+    
+    // Problem: Given a BST and a value to be deleted, 
+    // remove that node such that the BST doesn't lose its property (assume no duplicates).
+    public static TreeNode deleteNode(TreeNode root, int key) {
+        // TODO: Write your deletion logic here
+
+        if(root == null) return root;
+
+        if(key < root.val) {
+          root.left = deleteNode(root.left , key);
+        } else if(key > root.val){
+          root.right = deleteNode(root.right , key);
+        } else {
+          if(root.left == null && root.right == null) {
+            return null;
+          }
+          if(root.left == null) {
+            return root.right;
+          } 
+          if(root.right == null) {
+            return root.left;
+          } 
+          else {
+            int max = getMax(root.left);
+            root.val = max;
+            root.left = deleteNode(root.left , max);
+          }
+        }
+        return root;
+    }
+
+    // Helper method to build the BST for testing
+    public static TreeNode insert(TreeNode root, int val) {
+        if (root == null) return new TreeNode(val);
+        if (val < root.val) {
+            root.left = insert(root.left, val);
+        } else if (val > root.val) {
+            root.right = insert(root.right, val);
+        }
+        return root;
+    }
+
+    // Helper method to print the tree (Inorder traversal to verify BST order)
+    public static void inorder(TreeNode root) {
+        if (root == null) return;
+        inorder(root.left);
+        System.out.print(root.val + " ");
+        inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+        // Initial BST setup
+        TreeNode root = null;
+        int[] initialValues = {5, 3, 6, 2, 4, 7};
+        
+        for (int v : initialValues) {
+            root = insert(root, v);
+        }
+
+        System.out.print("BST Inorder before deletion: ");
+        inorder(root);
+        System.out.println();
+
+        // Delete a value
+        int keyToDelete = 3;
+        root = deleteNode(root, keyToDelete);
+
+        System.out.print("BST Inorder after deleting " + keyToDelete + ": ");
+        inorder(root);
+        System.out.println();
+    }
+}
