@@ -1,0 +1,59 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    // Constructor to initialize the node
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class Main {
+    // Helper method to build the BST for testing
+    public static TreeNode insert(TreeNode root, int val) {
+        if (root == null) {
+            return new TreeNode(val);
+        }
+        if (val <= root.val) {
+            root.left = insert(root.left, val);
+        } else {
+            root.right = insert(root.right, val);
+        }
+        return root;
+    }
+
+    public static boolean searchInBST(TreeNode root, int target) {
+        if (root == null) {
+            return false;
+        }
+
+        if (root.val == target) return true;
+
+        if (target < root.val) {
+            return searchInBST(root.left, target);
+        } else {
+            return searchInBST(root.right, target);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Build a sample BST: [5, 3, 7, 2, 4, 6, 8]
+        TreeNode root = null;
+        int[] values = {5, 3, 7, 2, 4, 6, 8};
+        for (int val : values) {
+            root = insert(root, val);
+        }
+
+        // Test the searchInBST method
+        int target1 = 4;
+        int target2 = 9;
+
+        System.out.println("Searching for " + target1 + ": " + searchInBST(root, target1)); // true
+        System.out.println("Searching for " + target2 + ": " + searchInBST(root, target2)); // false
+    }
+}
