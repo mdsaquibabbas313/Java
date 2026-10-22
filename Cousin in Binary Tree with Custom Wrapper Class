@@ -1,0 +1,59 @@
+https://leetcode.com/problems/cousins-in-binary-tree/solutions/8584362/clean-bfs-approach-using-custom-wrapper-lmhq2/
+
+class ParentChildVal {
+    TreeNode child;
+    TreeNode parent;
+    ParentChildVal(TreeNode c, TreeNode p) {
+        child = c;
+        parent = p;
+    }
+}
+
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        if (root == null) return false;
+        
+        Queue<ParentChildVal> queue = new LinkedList<>();
+        queue.offer(new ParentChildVal(root, null));
+
+        while(!queue.isEmpty()) {
+            int queueSize = queue.size();
+            
+            boolean foundX = false;
+            boolean foundY = false;
+            TreeNode parentX = null;
+            TreeNode parentY = null;
+            
+            for(int i = 0; i < queueSize; i++) {
+                ParentChildVal currentPc = queue.poll();
+                TreeNode curr = currentPc.child;
+                
+                if(curr.val == x) {
+                    foundX = true;
+                    parentX = currentPc.parent;
+                }
+                if(curr.val == y) {
+                    foundY = true;
+                    parentY = currentPc.parent;
+                }
+
+                if(curr.left != null) {
+                    queue.offer(new ParentChildVal(curr.left, curr));
+                }
+
+                if(curr.right != null) {
+                    queue.offer(new ParentChildVal(curr.right, curr));
+                }
+            }
+            
+            // Check after finishing each level
+            if (foundX && foundY) {
+                return parentX != parentY;
+            }
+            if (foundX || foundY) {
+                return false; // If only one is found at this level, they are at different depths
+            }
+        }
+        return false;
+    }
+}
