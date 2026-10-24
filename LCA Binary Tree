@@ -69,3 +69,21 @@ public class Main {
         }
     }
 }
+
+
+
+LCA function without explicit check
+
+
+        if(root == null) return null;
+
+        if(root == p || root == q) return root;
+
+        TreeNode getLCAFromLST = lowestCommonAncestor(root.left , p , q);
+
+        TreeNode getLCAFromRST = lowestCommonAncestor(root.right , p , q);
+
+        if(getLCAFromLST != null && getLCAFromRST != null) return root;
+
+        if(getLCAFromLST == null) return getLCAFromRST;
+        else return getLCAFromLST;
