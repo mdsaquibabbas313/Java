@@ -1,0 +1,60 @@
+// O(N^2) 
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class Main {
+    
+    // Problem: Given the root of a binary tree, return the length of the diameter of the tree.
+    // The diameter of a binary tree is the length of the longest path between any two nodes in a tree. 
+    // This path may or may not pass through the root.
+
+    public static int height(TreeNode root) {
+      if(root == null) return -1;
+
+      int heightLST = height(root.left);
+      int heightRST = height(root.right);
+
+      return 1 + Math.max(heightLST , heightRST);
+    }
+    public static int diameterOfBinaryTree(TreeNode root) {
+        // TODO: Write your logic here.
+        // Hint: Think about how the height of left and right subtrees at any node 
+        // contribute to the longest path passing through that node, while tracking the maximum globally.
+
+        if(root == null) return 0;
+
+        int diameterOfLST = diameterOfBinaryTree(root.left);
+        int diameterOfRST = diameterOfBinaryTree(root.right);
+        int diameter = height(root.left) + height(root.right) + 2;
+        return Math.max(diameter, Math.max(diameterOfLST, diameterOfRST));
+      
+    }
+
+    public static void main(String[] args) {
+        // Sample Binary Tree setup:
+        //         1
+        //       /   \
+        //      2     3
+        //     / \   
+        //    4   5  
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+
+        int diameter = diameterOfBinaryTree(root);
+        System.out.println("Diameter of Binary Tree: " + diameter);
+    }
+}
