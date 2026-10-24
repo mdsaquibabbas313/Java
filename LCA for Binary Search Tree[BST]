@@ -1,0 +1,87 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class Main {
+    
+    // Problem: Given a BST and two nodes p and q (both guaranteed to be present), 
+    // find their Lowest Common Ancestor using BST properties.
+    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // TODO: Write your BST LCA logic here (can be done recursively or iteratively)
+
+        if(root == null) return null;
+
+        if(root == p || root == q) return root;
+
+        if(p.val < root.val && q.val < root.val) return lowestCommonAncestor(root.left , p , q);
+
+        if(p.val > root.val && q.val > root.val) return lowestCommonAncestor(root.right , p , q);
+
+        return root;
+
+
+/*
+        TreeNode lstLCA = null;
+        TreeNode rstLCA = null;
+        if(p.val < root.val) {
+          lstLCA =  lowestCommonAncestor(root.left , p , q);
+        } else {
+          rstLCA = lowestCommonAncestor(root.right , p , q);
+        }
+
+        if(q.val < root.val) {
+          lstLCA = lowestCommonAncestor(root.left , p, q);
+        } else {
+          rstLCA = lowestCommonAncestor(root.right , p , q);
+        }
+
+        if(lstLCA != null && rstLCA != null) return root;
+        if(lstLCA == null) return rstLCA;
+        else return lstLCA;
+
+        */
+
+    }
+
+    public static void main(String[] args) {
+        // Sample BST setup:
+        //         6
+        //       /   \
+        //      2     8
+        //     / \   / \
+        //    0   4 7   9
+        //       / \
+        //      3   5
+        TreeNode root = new TreeNode(6);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(8);
+        root.left.left = new TreeNode(0);
+        root.left.right = new TreeNode(4);
+        root.right.left = new TreeNode(7);
+        root.right.right = new TreeNode(9);
+        root.left.right.left = new TreeNode(3);
+        root.left.right.right = new TreeNode(5);
+
+        // Let's test with nodes 2 and 8 (LCA should be 6)
+        TreeNode p = root.left;   // Node 2
+        TreeNode q = root.right;  // Node 8
+
+        TreeNode lca = lowestCommonAncestor(root, p, q);
+        
+        if (lca != null) {
+            System.out.println("LCA of " + p.val + " and " + q.val + " is: " + lca.val);
+        } else {
+            System.out.println("LCA not found.");
+        }
+    }
+}
