@@ -58,3 +58,57 @@ public class Main {
         System.out.println("Diameter of Binary Tree: " + diameter);
     }
 }
+
+
+// O(N) : get treeInfo both at once by custom class
+
+LEETCODE : 543. Diameter of Binary Tree
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ class TreeInfo{
+  int height;
+  int diameter;
+
+  TreeInfo(int h , int d) {
+    height = h;
+    diameter = d;
+  }
+}
+class Solution {
+        public static TreeInfo getTreeInfo(TreeNode root) {
+
+      if(root == null) {
+        return new TreeInfo(-1,-1);
+      }
+      TreeInfo lst = getTreeInfo(root.left);
+      TreeInfo rst = getTreeInfo(root.right);
+      int x = Math.max(lst.height , rst.height) + 1; // calculates height
+      int y = Math.max(lst.height + rst.height + 2, Math.max(lst.diameter , rst.diameter)); // calculates diameter
+      TreeInfo treeInfo = new TreeInfo( x , y );
+
+      return treeInfo;
+    }
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        if(root == null) return -1;
+
+      TreeInfo treeInfo = getTreeInfo(root);
+
+      return treeInfo.diameter;
+        
+    }
+}
