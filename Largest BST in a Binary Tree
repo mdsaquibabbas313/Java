@@ -1,0 +1,93 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+// TODO: Design your custom Info class (e.g., LargestBstInfo) to track:
+// - isBst (boolean)
+// - min (long)
+// - max (long)
+// - size (int) -> number of nodes in the valid BST subtree
+
+class LargestBstInfo{
+  boolean isBst;
+  long max;
+  long min;
+  int size;
+
+  LargestBstInfo(boolean a , long b , long c , int d){
+    this.isBst = a;
+    this.max = b;
+    this.min = c;
+    this.size = d;
+  }
+}
+
+public class Main {
+
+    // TODO: Implement your helper method
+    public static LargestBstInfo getLargestBstInfo(TreeNode root) {
+      if(root == null) {
+        return new LargestBstInfo(true , Long.MIN_VALUE, Long.MAX_VALUE , 0);
+      }
+
+      LargestBstInfo leftInfo = getLargestBstInfo(root.left);
+      LargestBstInfo rightInfo = getLargestBstInfo(root.right);
+
+      boolean isBst = false;
+      long mx = (long) root.val;
+      long mn = (long) root.val;
+      int size = 0;
+      
+
+      if(leftInfo.isBst && rightInfo.isBst && leftInfo.max < (long)root.val && (long)root.val < rightInfo.min) {
+        isBst = true;
+      }
+
+      mx = Math.max(mx , Math.max(leftInfo.max , rightInfo.max));
+      mn = Math.min(mn , Math.min(leftInfo.min , rightInfo.min));
+
+      if(isBst) {
+        size = leftInfo.size + rightInfo.size + 1;
+      } else {
+        size = Math.max(leftInfo.size , rightInfo.size);
+      }
+
+      return new LargestBstInfo(isBst , mx , mn , size);
+
+    }
+
+
+    public static int largestBSTSubtree(TreeNode root) {
+    LargestBstInfo largestBstInfo = getLargestBstInfo(root);
+    return largestBstInfo.size;
+  }
+
+    public static void main(String[] args) {
+        // Sample Binary Tree setup:
+        //         10
+        //       /    \
+        //      5     15
+        //     / \      \
+        //    1   8      7
+        // Expected Largest BST Subtree size: 3 (rooted at 5, with children 1 and 8)
+        TreeNode root = new TreeNode(10);
+        root.left = new TreeNode(5);
+        root.right = new TreeNode(15);
+        root.left.left = new TreeNode(1);
+        root.left.right = new TreeNode(8);
+        root.right.right = new TreeNode(7);
+
+        int maxSize = largestBSTSubtree(root);
+        System.out.println("Size of Largest BST Subtree: " + maxSize);
+    }
+}
