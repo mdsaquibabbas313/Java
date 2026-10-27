@@ -1,0 +1,80 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+// TODO: Design your custom Info class to track:
+// - isBst (boolean)
+// - min (long)
+// - max (long)
+// - sum (int) -> sum of nodes in this subtree
+class BstSumInfo {
+    boolean isBst;
+    long max;
+    long min;
+    int sum;
+    BstSumInfo(boolean a , long b , long c , int d){
+        this.isBst = a;
+        this.max = b;
+        this.min = c;
+        this.sum = d; 
+    }
+}
+
+class Solution {
+    int maxSum = 0;
+
+    public BstSumInfo getBstSumInfo(TreeNode root) {
+        // TODO: Base case for null nodes
+        if(root == null) {
+          return new BstSumInfo(true , Long.MIN_VALUE , Long.MAX_VALUE , 0);
+        }
+        
+        // TODO: Post-order traversal (get leftSbtInfo and rightSbtInfo)
+        BstSumInfo leftSbtInfo = getBstSumInfo(root.left);
+        BstSumInfo rightSbtInfo = getBstSumInfo(root.right);
+        
+        boolean isBst = false;
+        long mx = root.val;
+        long mn = root.val;
+        int sum = root.val;
+        // TODO: Check if current node/subtree is a valid BST
+        if(leftSbtInfo.isBst && rightSbtInfo.isBst && (
+          leftSbtInfo.max < root.val && root.val < rightSbtInfo.min
+        )) {
+          isBst = true;
+        }
+
+        mx = Math.max(mx , Math.max(leftSbtInfo.max , rightSbtInfo.max));
+        mn = Math.min(mn , Math.min(leftSbtInfo.min , rightSbtInfo.min));
+
+        if(isBst) {
+          sum += leftSbtInfo.sum + rightSbtInfo.sum;
+          maxSum = Math.max(maxSum , sum);
+        }
+        
+        // TODO: Calculate current subtree's max, min, and sum
+        
+        // TODO: Update global maxSum if current subtree is a valid BST
+        
+        // TODO: Return the custom info object
+        return new BstSumInfo(isBst , mx , mn , sum);
+    }
+
+    public int maxSumBST(TreeNode root) {
+        maxSum = 0;
+        BstSumInfo bstSumInfo = getBstSumInfo(root);
+        return maxSum;
+    }
+}
