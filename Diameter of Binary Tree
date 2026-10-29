@@ -112,3 +112,64 @@ class Solution {
         
     }
 }
+
+
+// Splitted in Condition for Diameter
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+class TreeInfo{
+    int height;
+    int diameter;
+
+    TreeInfo(int h , int d){
+        this.height = h;
+        this.diameter = d;
+    }
+} 
+class Solution {
+    public TreeInfo getTreeInfo(TreeNode root) {
+
+        if(root == null) {
+            return new TreeInfo(-1 , -1);
+        }
+
+        TreeInfo leftInfo = getTreeInfo(root.left);
+        TreeInfo rightInfo = getTreeInfo(root.right);
+        
+        int height = Math.max(leftInfo.height , rightInfo.height) + 1;
+
+        int condition1 = Math.max(leftInfo.diameter , rightInfo.diameter);
+        int condition2 = leftInfo.height + rightInfo.height + 2;
+
+        int diameter = Math.max(condition1 , condition2);
+
+        return new TreeInfo(height , diameter);
+
+
+    }
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        if(root == null) {
+            return -1;
+        }
+        TreeInfo treeInfo = getTreeInfo(root);
+
+        return treeInfo.diameter;
+    }
+}
