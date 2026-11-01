@@ -1,0 +1,66 @@
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class Main {
+    static TreeNode n1 = null;
+    static TreeNode n2 = null;
+    static TreeNode prev = null;
+
+    public static void findSwappedNode(TreeNode root) {
+        if(root == null) return;
+
+        findSwappedNode(root.left);
+        
+        TreeNode curr = root; // Fixed type from 'root' to 'TreeNode'
+
+        if(prev != null && curr.val < prev.val) {
+          if(n1 == null) {
+            n1 = prev;
+            n2 = curr; 
+          } else {
+            n2 = curr;
+          }
+        }
+        prev = root;
+        
+        findSwappedNode(root.right);
+    }
+
+    public static void main(String[] args) {
+        n1 = null;
+        n2 = null;
+        prev = null;
+        System.out.println("Running test cases...");
+
+        // Build a valid BST first, then swap two node values (e.g., 15 and 16)
+        TreeNode root2 = new TreeNode(11);
+        root2.left = new TreeNode(6);
+        root2.right = new TreeNode(15); // Swapped: 16 was supposed to be here
+        root2.left.left = new TreeNode(2);
+        root2.left.right = new TreeNode(9);
+        root2.right.left = new TreeNode(16); // Swapped: 15 was supposed to be here
+        root2.right.right = new TreeNode(18);
+        root2.right.right.right = new TreeNode(21);
+
+        System.out.println("\nTesting Test Case (Swapped 15 and 16):");
+        findSwappedNode(root2);
+
+        // Printing the swapped nodes
+        if (n1 != null && n2 != null) {
+            System.out.println("The two swapped nodes are: " + n1.val + " and " + n2.val);
+        } else {
+            System.out.println("No swapped nodes found.");
+        }
+    }
+}
