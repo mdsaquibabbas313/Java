@@ -1,0 +1,53 @@
+import java.util.Arrays;
+import java.util.Comparator;
+
+class IpInfo {
+    int idx; // Position on the hash ring
+    String ipAddress;
+
+    IpInfo(int idx, String ipAddress) {
+        this.idx = idx;
+        this.ipAddress = ipAddress;
+    }
+}
+
+public class Main {
+    
+    // Finds the successor shard for a given hash position using binary search
+    public static IpInfo findShardForPosition(IpInfo[] shards, int targetIdx) {
+        int low = 0;
+        int high = shards.length - 1;
+        int ansIndex = 0; // Default wrap-around to the first shard
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            if (shards[mid].idx >= targetIdx) {
+                ansIndex = mid;
+                high = mid - 1; // Try to find an even closer shard on the left
+            } else {
+                low = mid + 1; // Target is larger, look on the right
+            }
+        }
+        
+        return shards[ansIndex];
+    }
+
+    public static void main(String[] args) {
+        // Assume our consistent hash ring has shards placed at sorted positions
+        IpInfo[] shards = {
+            new IpInfo(10, "192.168.1.10"),
+            new IpInfo(50, "192.168.1.20"),
+            new IpInfo(90, "192.168.1.30")
+        };
+
+        // Sort shards just to be safe (though they should ideally be maintained in sorted order)
+        Arrays.sort(shards, Comparator.comparingInt(s -> s.idx));
+
+        // Let's say a key hashes to position 35
+        int keyHash = 91;
+        IpInfo assignedShard = findShardForPosition(shards, keyHash);
+
+        System.out.println("Key hash " + keyHash + " is assigned to shard: " + assignedShard.ipAddress + " at position " + assignedShard.idx);
+    }
+}
