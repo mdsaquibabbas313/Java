@@ -1,0 +1,45 @@
+//  Approach 1 : O(N)
+
+import java.util.*;
+
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+
+    // Added constructor to initialize node values easily
+    TreeNode(int val) {
+        this.val = val;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class Main {
+    public static int countNodesOfCompleteBT(TreeNode root) {
+        if (root == null) return 0;
+
+        return 1 + countNodesOfCompleteBT(root.left) + countNodesOfCompleteBT(root.right);
+    }
+
+    public static void main(String[] args) {
+        /*
+                   1
+                 /   \
+                2     3
+               / 
+              4   
+        */
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+
+        int totalNodes = countNodesOfCompleteBT(root);
+        System.out.println("Total nodes: " + totalNodes);
+    }
+}
+
+Approach 2 : Less Than 0(N)
+
+// TODO:
