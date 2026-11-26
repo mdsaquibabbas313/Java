@@ -1,0 +1,16 @@
+class Solution {
+    public boolean canAliceWin(int n) {
+        if(n < 10) return false;
+        boolean alice = false;
+        int stone = 10;
+
+        while((n - stone) >= 0) {
+            alice = !alice;
+            n = n - stone;
+            stone = stone - 1;
+        }
+
+        return alice;
+        
+    }
+}
